@@ -7,8 +7,7 @@
       :tree-props="{children: 'children', hasChildren: 'hasChildren'}"
       style="width: 100%;margin-bottom: 20px;"
       row-key="id"
-      border
-      default-expand-all>
+      border>
       <el-table-column
         prop="name"
         label="名称"
