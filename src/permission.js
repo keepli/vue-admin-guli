@@ -40,6 +40,7 @@ router.beforeEach(async(to, from, next) => {
           // dynamically add accessible routes
 
           // 设置动态路由的方法
+          console.log('动态添加路由router.addRoutes方法执行')
           router.addRoutes(accessRoutes)
 
           next({ ...to, replace: true })

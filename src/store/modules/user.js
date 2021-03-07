@@ -60,7 +60,7 @@ const user = {
           // debugger
           const data = response.data
           if (data.roles && data.roles.length > 0) { // 验证返回的roles是否是一个非空数组
-            commit('SET_ROLES', data.roles)
+            commit('SET_ROLES', data.roles)// 设置角色(vue-admin-template中自带)
           } else {
             reject('getInfo: roles must be a non-null array !')
           }
@@ -70,9 +70,9 @@ const user = {
             buttonAuthList.push(button)
           })
 
-          commit('SET_NAME', data.name)
-          commit('SET_AVATAR', data.avatar)
-          commit('SET_BUTTONS', buttonAuthList)
+          commit('SET_NAME', data.name) // 设置用户名(vue-admin-template中自带)
+          commit('SET_AVATAR', data.avatar)// 设置头像(vue-admin-template中自带)
+          commit('SET_BUTTONS', buttonAuthList)// 实现按钮级别的显示控制，自己加的
           resolve(response)
         }).catch(error => {
           reject(error)

@@ -19,7 +19,7 @@ import { hasBtnPermission } from './utils/permission' // button permission
 Vue.use(ElementUI, { locale })
 
 Vue.config.productionTip = false
-Vue.prototype.hasPerm = hasBtnPermission
+Vue.prototype.hasPerm = hasBtnPermission // 设置全局变量，用作做为按钮级别权限控制，这是个函数，使用时需要传参
 
 new Vue({
   el: '#app',

@@ -35,6 +35,7 @@ const state = {
 const mutations = {
   SET_ROUTES: (state, routes) => {
     state.addRoutes = routes
+    // 使用数组中的方法合并成新数组，保证在用户返回时正常
     state.routes = constantRoutes.concat(routes)
   }
 }

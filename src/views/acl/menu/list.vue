@@ -2,36 +2,31 @@
   <div class="app-container">
     <el-input v-model="filterText" placeholder="Filter keyword" style="margin-bottom:30px;"/>
 
-
     <el-table
       :data="menuList"
+      :tree-props="{children: 'children', hasChildren: 'hasChildren'}"
       style="width: 100%;margin-bottom: 20px;"
       row-key="id"
       border
-      default-expand-all
-      :tree-props="{children: 'children', hasChildren: 'hasChildren'}">
+      default-expand-all>
       <el-table-column
         prop="name"
         label="名称"
         sortable
-        width="180">
-      </el-table-column>
+        width="180"/>
       <el-table-column
         prop="path"
         label="访问路径"
         sortable
-        width="180">
-      </el-table-column>
+        width="180"/>
       <el-table-column
         prop="component"
         label="组件路径"
         sortable
-        width="180">
-      </el-table-column>
+        width="180"/>
       <el-table-column
         prop="permissionValue"
-        label="权限值">
-      </el-table-column>
+        label="权限值"/>
       <el-table-column
         label="操作">
         <template slot-scope="scope">
@@ -43,27 +38,28 @@
             @click="() => {dialogFormVisible = true, menu.pid = scope.row.id}">添加菜单
           </el-button>
           <el-button
-            v-if="scope.row.level == 3 &&  hasPerm('permission.add')"
+            v-if="scope.row.level == 3 && hasPerm('permission.add')"
             type="text"
             size="mini"
             @click="() => {dialogPermissionVisible = true, permission.pid = scope.row.id}">添加功能
           </el-button>
           <el-button
-            v-if="scope.row.level == 4 &&  hasPerm('permission.update')"
+            v-if="scope.row.level == 4 && hasPerm('permission.update')"
             type="text"
             size="mini"
             @click="() => updateFunction(scope.row)">修改功能
           </el-button>
           <el-button
-            v-if="scope.row.level != 4 &&  hasPerm('permission.update')"
+            v-if="scope.row.level != 4 && hasPerm('permission.update')"
             type="text"
             size="mini"
             @click="() => getById(scope.row)">修改
           </el-button>
           <el-button
+            v-if="hasPerm('permission.remove')"
             type="text"
             size="mini"
-            @click="() => remove(scope.row)" v-if="hasPerm('permission.remove')">删除
+            @click="() => remove(scope.row)">删除
           </el-button>
         </template>
       </el-table-column>
@@ -148,13 +144,13 @@ export default {
       menu: menuForm,
       permission: perForm,
       menuValidateRules: {
-        name: [{required: true, trigger: 'blur', message: '菜单名必须输入'}],
-        path: [{required: true, trigger: 'blur', message: '菜单路径必须输入'}],
-        component: [{required: true, trigger: 'blur', message: '组件名称必须输入'}]
+        name: [{ required: true, trigger: 'blur', message: '菜单名必须输入' }],
+        path: [{ required: true, trigger: 'blur', message: '菜单路径必须输入' }],
+        component: [{ required: true, trigger: 'blur', message: '组件名称必须输入' }]
       },
       permissionValidateRules: {
-        name: [{required: true, trigger: 'blur', message: '功能名称必须输入'}],
-        permissionValue: [{required: true, trigger: 'blur', message: '功能权限值必须输入'}]
+        name: [{ required: true, trigger: 'blur', message: '功能名称必须输入' }],
+        permissionValue: [{ required: true, trigger: 'blur', message: '功能权限值必须输入' }]
       }
     }
   },
@@ -225,8 +221,8 @@ export default {
               })
               // 刷新页面
               this.fetchNodeList()
-              this.menu = {...menuForm}
-              this.permission = {...perForm}
+              this.menu = { ...menuForm }
+              this.permission = { ...perForm }
             })
           }
         }
@@ -242,8 +238,8 @@ export default {
           })
           // 刷新页面
           this.fetchNodeList()
-          this.menu = {...menuForm}
-          this.permission = {...perForm}
+          this.menu = { ...menuForm }
+          this.permission = { ...perForm }
         })
         .catch(response => {
           // 你们写：判断点击取消清空一下
@@ -252,8 +248,8 @@ export default {
             type: 'error',
             message: '添加一级菜单失败'
           })
-          this.menu = {...menuForm}
-          this.permission = {...perForm}
+          this.menu = { ...menuForm }
+          this.permission = { ...perForm }
         })
     },
 
@@ -294,13 +290,13 @@ export default {
           // 2、提示成功
           this.$message({
             type: 'success',
-            message: "添加二级分类成功"
+            message: '添加二级分类成功'
           })
           // 3、刷新页面
           this.fetchNodeList()
           // 4、把menu清空
-          this.menu = {...menuForm}
-          this.permission = {...perForm}
+          this.menu = { ...menuForm }
+          this.permission = { ...perForm }
         })
         .catch(response => {
           // 1、把文本框关
@@ -308,12 +304,11 @@ export default {
           // 2、提示成功
           this.$message({
             type: 'error',
-            message: "添加二级分类失败"
+            message: '添加二级分类失败'
           })
           // 3、把menu清空
-          this.menu = {...menuForm}
-          this.permission = {...perForm}
-
+          this.menu = { ...menuForm }
+          this.permission = { ...perForm }
         })
     },
     getById(data) {
@@ -327,8 +322,8 @@ export default {
     restData() {
       this.dialogPermissionVisible = false
       this.dialogFormVisible = false
-      this.menu = {...menuForm}
-      this.permission = {...perForm}
+      this.menu = { ...menuForm }
+      this.permission = { ...perForm }
     }
   }
 }

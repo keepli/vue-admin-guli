@@ -4,7 +4,7 @@
     <!--查询表单-->
     <el-form :inline="true" class="demo-form-inline">
       <el-form-item>
-         <el-input v-model="searchObj.username" placeholder="用户名"/>
+        <el-input v-model="searchObj.username" placeholder="用户名"/>
       </el-form-item>
 
       <el-button type="primary" icon="el-icon-search" @click="fetchData()">查询</el-button>
@@ -13,8 +13,8 @@
 
     <!-- 工具条 -->
     <div>
-      <el-button type="danger" size="mini" @click="addUser()" v-if="hasPerm('user.add')">添加</el-button>
-      <el-button type="danger" size="mini" @click="removeRows()" v-if="hasPerm('user.remove')">批量删除</el-button>
+      <el-button v-if="hasPerm('user.add')" type="danger" size="mini" @click="addUser()">添加</el-button>
+      <el-button v-if="hasPerm('user.remove')" type="danger" size="mini" @click="removeRows()">批量删除</el-button>
 
     </div>
 
@@ -48,12 +48,12 @@
       <el-table-column label="操作" width="230" align="center">
         <template slot-scope="scope">
           <router-link :to="'/acl/user/role/'+scope.row.id">
-            <el-button type="info" size="mini" icon="el-icon-info" v-if="hasPerm('user.assgin')"></el-button>
+            <el-button v-if="hasPerm('user.assgin')" type="info" size="mini" icon="el-icon-info"/>
           </router-link>
           <router-link :to="'/acl/user/update/'+scope.row.id">
-            <el-button type="primary" size="mini" icon="el-icon-edit" v-if="hasPerm('user.update')"></el-button>
+            <el-button v-if="hasPerm('user.update')" type="primary" size="mini" icon="el-icon-edit"/>
           </router-link>
-          <el-button type="danger" size="mini" icon="el-icon-delete" @click="removeDataById(scope.row.id)" v-if="hasPerm('user.remove')"></el-button>
+          <el-button v-if="hasPerm('user.remove')" type="danger" size="mini" icon="el-icon-delete" @click="removeDataById(scope.row.id)"/>
         </template>
       </el-table-column>
     </el-table>
@@ -108,7 +108,7 @@ export default {
       this.fetchData(1)
     },
 
-    addUser(){
+    addUser() {
       this.$router.push({ path: '/acl/user/add' })
     },
 
@@ -226,5 +226,4 @@ export default {
   }
 }
 </script>
-
 
