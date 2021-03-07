@@ -40,7 +40,7 @@ export const constantRoutes = [
  * 动态路由
  */
 export const asyncRoutes = [
-  // 以下所有内容都可以删除，用来参考使用
+  // 以下所有内容都可以删除，用来参考使用，数据库上的数据要对应上
   {
     path: '/teacher',
     component: Layout,
