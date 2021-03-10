@@ -48,25 +48,8 @@ export default {
     return {
       statisticsDailyQuery: {},
       btnDisabled: false,
-      // 指定图表的配置项和数据
-      option: {
-        // x轴是类目轴（离散数据）,必须通过data设置类目数据
-        xAxis: {
-          type: 'category',
-          data: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
-        },
-        // y轴是数据轴（连续数据）
-        yAxis: {
-          type: 'value'
-        },
-        // 系列列表。每个系列通过 type 决定自己的图表类型
-        series: [{
-          // 系列中的数据内容数组
-          data: [820, 932, 901, 934, 1290, 1330, 1320],
-          // 折线图
-          type: 'line'
-        }]
-      }
+      xData: [],
+      yData: []
     }
   },
   methods: {
@@ -75,9 +58,8 @@ export default {
       sta.getStatisticsDailyByCondition(this.statisticsDailyQuery)
         .then(response => {
           const dataCalculatedList = response.data.dataCalculatedList
-          this.option.xAxis.data = dataCalculatedList
-          this.option.series[0].data = response.data.conditionList
-          console.log('获取数据完成')
+          this.xData = dataCalculatedList
+          this.yData = response.data.conditionList
           if (dataCalculatedList.length === 0 || dataCalculatedList == null) {
             this.$notify.info({
               title: '提示',
@@ -94,7 +76,64 @@ export default {
       // 基于准备好的dom，初始化echarts实例
       this.chart = echarts.init(document.getElementById('chart'))
       // console.log(this.option)
-      this.chart.setOption(this.option)
+      // 指定图表的配置项和数据
+      var option = {
+        // x轴是类目轴（离散数据）,必须通过data设置类目数据
+        xAxis: {
+          type: 'category',
+          data: this.xData
+        },
+        // y轴是数据轴（连续数据）
+        yAxis: {
+          type: 'value'
+        },
+        // 系列列表。每个系列通过 type 决定自己的图表类型
+        series: [{
+          // 系列中的数据内容数组
+          data: this.yData,
+          // 折线图
+          type: 'line'
+        }],
+        // 以下部分为个性化配置
+        // 显示标题
+        title: {
+          text: '统计数据'
+        },
+        // x坐标轴触发提示
+        tooltip: {
+          trigger: 'axis'
+        },
+        // 区域缩放开始
+        dataZoom: [{
+          show: true,
+          height: 30,
+          xAxisIndex: [
+            0
+          ],
+          bottom: 30,
+          start: 10,
+          end: 80,
+          handleIcon: 'path://M306.1,413c0,2.2-1.8,4-4,4h-59.8c-2.2,0-4-1.8-4-4V200.8c0-2.2,1.8-4,4-4h59.8c2.2,0,4,1.8,4,4V413z',
+          handleSize: '110%',
+          handleStyle: {
+            color: '#d3dee5'
+
+          },
+          textStyle: {
+            color: '#fff'
+          },
+          borderColor: '#90979c'
+        },
+        {
+          type: 'inside',
+          show: true,
+          height: 15,
+          start: 1,
+          end: 35
+        }]
+        // 区域缩放结束
+      }
+      this.chart.setOption(option)
     }
   }
 }
