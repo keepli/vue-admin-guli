@@ -84,10 +84,12 @@ export default {
               message: '该时间段内暂无统计数据！'
             })
           }
+
+          // 设置图表参数
           this.setChart()
         })
     },
-    // 设置图标参数
+    // 设置图表参数
     setChart() {
       // 基于准备好的dom，初始化echarts实例
       this.chart = echarts.init(document.getElementById('chart'))
