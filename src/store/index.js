@@ -24,13 +24,13 @@ const store = new Vuex.Store({
   getters,
   // 解决刷新vuex状态丢失问题
   plugins: [createPersistedState({
-    storage: window.sessionStorage,
-    reducer(val) {
-      return {
-        // 只储存state中的assessmentData
-        dict: val.dict
-      }
-    }
+    storage: window.sessionStorage // 当前会话持久化存储，如果关闭浏览器则需要重新登录
+    // ,reducer(val) {
+    //   return {
+    //     // 只储存state中的assessmentData
+    //     dict: val.dict
+    //   }
+    // }
   })]
 })
 
