@@ -51,6 +51,7 @@
             :on-success="handleVodUploadSuccess"
             :on-remove="handleVodRemove"
             :before-remove="beforeVodRemove"
+            :before-upload="beforeVodUpload"
             :on-exceed="handleUploadExceed"
             :file-list="fileList"
             :action="BASE_API+'/vod/file/upload'"
@@ -72,7 +73,7 @@
         <el-button @click="videoFormVisible = false">取 消</el-button>
         <!-- TODO：addVideo未完成 -->
         <el-button v-show="addVidoFlag" type="primary" @click="addVideo(chapter.id)">确 定</el-button>
-        <el-button v-show="!addVidoFlag" type="primary" @click="updateVideo">确 定</el-button>
+        <el-button v-show="!addVidoFlag" :disabled="!videoBtn" type="primary" @click="updateVideo">确 定</el-button>
       </div>
     </el-dialog>
 
@@ -82,7 +83,7 @@
         <el-form-item :label-width="formLabelWidth" label="章节标题">
           <el-input v-model="chapter.title" autocomplete="off"/>
         </el-form-item>
-        <el-form-item :label-width="formLabelWidth" label="讲师排序">
+        <el-form-item :label-width="formLabelWidth" label="章节排序">
           <el-input-number v-model="chapter.sort" :min="chapter.sort" controls-position="right" />
         </el-form-item>
       </el-form>
@@ -107,6 +108,7 @@ export default {
       addVidoFlag: true,
       chapterFormVisible: false,
       videoFormVisible: false,
+      videoBtn: true, // 编辑小节时视频没上传完之前禁用确认按钮
       formLabelWidth: '120px',
       chapter: {
         title: '',
@@ -118,6 +120,7 @@ export default {
         isFree: 0
       },
       chapterVideoList: [],
+      fileList: [], // 视频列表
       BASE_API: process.env.BASE_API // 获取基础路由路径
     }
   },
@@ -125,12 +128,18 @@ export default {
     this.reloadChapter()
   },
   methods: {
+    // 上传视频之前调用方法
+    beforeVodUpload() {
+      this.videoBtn = false// 禁用确认按钮
+    },
     // 上传成功回调方法
     handleVodUploadSuccess(response, file, fileList) {
       // 上传视频id赋值
       this.video.videoSourceId = response.data.videoSourceId
       // 上传视频名称赋值
       this.video.videoOriginalName = file.name
+      // 解除确认按钮禁用状态
+      this.videoBtn = true
     },
     // 删除视频之前调用方法
     beforeVodRemove(file, fileList) {
@@ -140,13 +149,16 @@ export default {
     handleVodRemove() {
       video.deleteVodById(this.video.videoSourceId)
         .then(response => {
-          this.$message({
-            type: 'success',
-            message: '删除成功!'
-          })
           // 清空阿里视频相关信息
           this.video.videoSourceId = ''
           this.video.videoOriginalName = ''
+          video.updateVideo(this.video)
+            .then(response => {
+              this.$message({
+                type: 'success',
+                message: '删除成功!'
+              })
+            })
         })
     },
     // 添加章节
@@ -258,6 +270,7 @@ export default {
       this.video.courseId = courseId // 为小节设置courseId值
       this.chapterId = chapterId // 获取循环中的chapterId
       this.videoFormVisible = true
+      this.fileList = [] // 清空上传文件列表
     },
     // 打开编辑章节表单
     openEditChatper(event, chapterId) {
@@ -279,12 +292,19 @@ export default {
     },
     // 打开编辑小节表单
     openEditVideo(videoId) {
+      this.fileList = [] // 清空上传文件列表
+      this.videoBtn = true
       video.findVideoById(videoId)
         .then(response => {
           this.video = response.data.video
           this.addVidoFlag = false
           this.videoFormVisible = true
+          const fileName = this.video.videoOriginalName
+          if (fileName && fileName !== null) {
+            this.fileList = [{ name: this.video.videoOriginalName }] // 添加上传文件列表
+          }
         })
+      console.log(this.fileList)
     },
     // 重新获取章节数据
     reloadChapter() {
